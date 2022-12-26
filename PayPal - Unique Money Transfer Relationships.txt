@@ -1,0 +1,3 @@
+Answer:
+SELECT COUNT(DISTINCT(BACK.payer_id, BACK.recipient_id))/2 AS unique_relationships 
+FROM payments AS BACK JOIN payments AS FORTH ON BACK.payer_id=FORTH.recipient_id AND FORTH.payer_id=BACK.recipient_id;

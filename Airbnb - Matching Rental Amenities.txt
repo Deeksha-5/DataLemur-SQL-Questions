@@ -1,0 +1,20 @@
+Answer:
+WITH ordered_amenities AS (
+	SELECT * 
+	FROM rental_amenities 
+	ORDER BY rental_id, amenity
+),
+combined_amenities as (
+	SELECT rental_id,
+	       STRING_AGG(amenity, ';') AS amenities
+	FROM ordered_amenities
+	GROUP BY rental_id
+),
+info AS (
+	SELECT * 
+	FROM combined_amenities a INNER JOIN combined_amenities b 
+	ON a.rental_id != b.rental_id AND a.amenities = b.amenities
+)
+
+SELECT count(*)/2
+FROM info;

@@ -1,0 +1,24 @@
+Answer:
+WITH current_previous AS 
+(SELECT 
+      user_id, 
+      EXTRACT(MONTH FROM login_date) AS current_login_month, 
+      EXTRACT(MONTH FROM LAG(login_date) OVER(PARTITION BY user_id ORDER BY login_date)) AS previous_login_month
+FROM user_logins
+ORDER BY user_id, login_date),
+
+reactivation AS
+(SELECT user_id, current_login_month, previous_login_month,
+CASE
+  WHEN previous_login_month IS NULL THEN 1
+  WHEN current_login_month - previous_login_month != 1 THEN 1
+  ELSE 0
+  END AS reactivated
+FROM current_previous)
+
+SELECT * FROM (SELECT current_login_month AS current_month,
+SUM(reactivated) AS reactivated_users
+FROM reactivation
+GROUP BY current_login_month) info
+WHERE reactivated_users>0
+ORDER BY current_month;

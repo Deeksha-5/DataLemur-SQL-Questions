@@ -1,0 +1,18 @@
+Answer:
+WITH 
+info AS
+(SELECT a.emp_id as feid, a.manager_id as fmid,	a.manager_name as fmname,	
+        b.emp_id as seid,	b.manager_id as smid,	b.manager_name as smname
+FROM employees a LEFT JOIN employees b 
+ON a.manager_id=b.emp_id
+WHERE b.manager_name IS NOT NULL),
+
+not_smngr AS
+(SELECT DISTINCT smname FROM info 
+WHERE seid IN (SELECT DISTINCT smid FROM info))
+
+SELECT DISTINCT smname AS manager_name, COUNT(*) AS direct_report_count
+FROM info
+WHERE smname NOT IN (SELECT * FROM not_smngr)
+GROUP BY smname
+ORDER BY COUNT(*) DESC;

@@ -1,0 +1,7 @@
+Answer:
+SELECT COUNT(*) AS users_num 
+FROM 
+    (SELECT user_id, product_id, COUNT(DISTINCT DATE(purchase_date))
+    FROM purchases
+    GROUP BY user_id, product_id
+    HAVING COUNT(DISTINCT DATE(purchase_date))>1) info;

@@ -1,0 +1,14 @@
+Answer:
+WITH info AS 
+(SELECT * FROM orders JOIN customers ON orders.customer_id=customers.customer_id
+WHERE EXTRACT(MONTH FROM signup_timestamp)=6
+AND CAST(order_timestamp AS DATE)-CAST(signup_timestamp AS DATE)<=14)
+
+
+SELECT 
+ROUND(SUM(CASE 
+        WHEN status='completed incorrectly' OR status='never received'
+        THEN 1 
+        ELSE 0 
+    END)*100.0/COUNT(*)*1.0, 2)
+FROM info;

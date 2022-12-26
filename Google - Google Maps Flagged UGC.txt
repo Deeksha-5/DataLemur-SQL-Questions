@@ -1,0 +1,11 @@
+Answer:
+WITH 
+reviews AS (SELECT place_category, COUNT(*) AS content_count
+    FROM place_info JOIN maps_ugc_review ON place_info.place_id=maps_ugc_review.place_id
+    WHERE maps_ugc_review.content_tag='Off-topic'
+    GROUP BY place_category),
+top_place_category AS (SELECT place_category, content_count, RANK() OVER(ORDER BY content_count DESC) AS top_place 
+    FROM reviews)
+SELECT place_category AS off_topic_places
+FROM top_place_category
+WHERE top_place=1;

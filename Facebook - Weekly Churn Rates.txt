@@ -1,0 +1,10 @@
+Answer:
+WITH info AS 
+(SELECT *, ROUND(EXTRACT(DAY FROM signup_date)/7)+1 AS signup_week, 
+CASE WHEN EXTRACT(DAY FROM last_login-signup_date) < 28 THEN 1 ELSE 0 END AS churn
+FROM users
+WHERE EXTRACT(MONTH FROM signup_date)=6)
+
+SELECT signup_week, ROUND(AVG(churn)*100, 2)
+FROM info
+GROUP BY signup_week;

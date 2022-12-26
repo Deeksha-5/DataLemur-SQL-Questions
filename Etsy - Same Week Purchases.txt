@@ -1,0 +1,5 @@
+Answer:
+SELECT ROUND((COUNT(DISTINCT user_purchases.user_id)*100.0)/(COUNT(signups.user_id)), 2) as single_purchase_pct
+FROM signups LEFT JOIN user_purchases
+ON signups.user_id=user_purchases.user_id
+WHERE DATE(purchase_date)-DATE(signup_date)<7;

@@ -1,0 +1,12 @@
+Answer:
+WITH personal_company_profiles 
+AS (SELECT profile_id, MAX(personal_profiles.followers) AS personal_followers, MAX(company_pages.followers) AS company_followers
+    FROM personal_profiles 
+    JOIN employee_company ON personal_profiles.profile_id=employee_company.personal_profile_id
+    JOIN company_pages ON employee_company.company_id=company_pages.company_id
+    GROUP BY profile_id)
+
+SELECT profile_id
+FROM personal_company_profiles
+WHERE  personal_followers > company_followers
+ORDER  BY 1; 

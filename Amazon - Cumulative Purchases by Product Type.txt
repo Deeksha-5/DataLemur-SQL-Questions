@@ -1,0 +1,5 @@
+Answer:
+SELECT order_date, product_type, SUM(quantity) OVER(PARTITION BY product_type ORDER BY order_date) AS cum_purchased
+FROM total_trans
+GROUP BY order_date, product_type, quantity
+ORDER BY order_date, cum_purchased;

@@ -1,0 +1,9 @@
+Answer:
+SELECT user_id 
+FROM 
+    (SELECT user_id, EXTRACT(DAY FROM transaction_date)-LAG(EXTRACT(DAY FROM transaction_date)) OVER(PARTITION BY user_id ORDER BY transaction_date) AS diff
+    FROM transactions
+    ORDER BY user_id, transaction_date) info
+WHERE info.diff=1
+GROUP BY user_id
+HAVING SUM(diff)=2;

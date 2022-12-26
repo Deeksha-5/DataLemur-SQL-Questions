@@ -1,0 +1,11 @@
+Answer:
+SELECT COUNT(user_transactions.user_id) AS users 
+FROM user_transactions JOIN 
+(SELECT user_id, MIN(transaction_id) AS min_transaction_id
+FROM user_transactions
+GROUP BY user_id
+ORDER BY user_id)
+AS first_transaction
+ON user_transactions.user_id=first_transaction.user_id 
+AND user_transactions.transaction_id=first_transaction.min_transaction_id
+WHERE user_transactions.spend>50.00;

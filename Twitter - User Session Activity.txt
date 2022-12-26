@@ -1,0 +1,11 @@
+Answer:
+WITH info AS 
+(SELECT user_id, session_type, SUM(duration) as total_duration
+FROM sessions
+WHERE start_date BETWEEN TO_DATE('01/01/2022', 'MM/DD/YYYY HH24:MI:SS') 
+AND TO_DATE('02/01/2022', 'MM/DD/YYYY HH24:MI:SS')
+GROUP BY user_id, session_type)
+
+SELECT user_id, session_type, 
+RANK() OVER(PARTITION BY session_type ORDER BY total_duration DESC) 
+FROM info;

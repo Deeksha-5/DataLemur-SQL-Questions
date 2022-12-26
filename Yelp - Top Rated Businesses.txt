@@ -1,0 +1,10 @@
+Answer:
+SELECT SUM(CASE 
+            WHEN review_stars>=4 THEN 1 
+            ELSE 0 
+            END) AS business_num, 
+        ROUND((SUM(CASE 
+            WHEN review_stars>=4 THEN 1 
+            ELSE 0 
+            END)/(COUNT(*)*1.0))*100.0, 2) AS top_business_pct
+FROM reviews;

@@ -1,0 +1,10 @@
+Answer:
+SELECT * FROM (SELECT employee_id, salary, CASE
+WHEN salary<(avg_salary/2) THEN 'Underpaid'
+WHEN salary>2*(avg_salary) THEN 'Overpaid'
+ELSE 'NA'
+END AS status
+FROM employee_pay JOIN (SELECT title, ROUND(AVG(salary)) AS avg_salary
+FROM employee_pay
+GROUP BY title) AS avg_pay ON employee_pay.title=avg_pay.title) AS final
+WHERE final.status!='NA';

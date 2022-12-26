@@ -1,0 +1,8 @@
+Answer:
+SELECT 
+country, SUM(num_search) AS total_search, 
+ROUND(SUM(CASE WHEN num_search IS NOT NULL 
+              THEN num_search*invalid_result_pct ELSE NULL END)/SUM(num_search), 2)
+FROM search_category
+WHERE invalid_result_pct IS NOT NULL AND num_search IS NOT NULL
+GROUP BY country;
